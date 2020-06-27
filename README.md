@@ -1,2 +1,3 @@
-# concurrency-basics
-Example repo to back my Concurrency Basics talk
+# Concurrency Basics
+
+Example repo for my Concurrency Basics talk
