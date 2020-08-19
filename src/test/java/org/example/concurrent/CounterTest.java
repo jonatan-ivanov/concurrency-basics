@@ -17,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+/**
+ * Warning: Since the behavior is based on "luck", the tests are not consistent, they can give false positives.
+ */
 @Slf4j
 class CounterTest {
     private static final int TASK_COUNT = 4_000;
@@ -60,7 +63,10 @@ class CounterTest {
         countDownLatch.countDown();
         await(futures);
 
-        assertThat(counter.get()).isEqualTo(TASK_COUNT);
+        long result = counter.get();
+        assertThat(result)
+            .overridingErrorMessage("It seems there is an atomicity issue; expected: %d, actual: %d", TASK_COUNT, result)
+            .isEqualTo(TASK_COUNT);
     }
 
     @ParameterizedTest
@@ -75,7 +81,7 @@ class CounterTest {
         countDownLatch.await(300, MILLISECONDS);
 
         assertThat(countDownLatch.getCount())
-            .withFailMessage("It seems the background thread did not see the change")
+            .overridingErrorMessage("It seems there is a visibility issue; the background thread did not see the change.")
             .isEqualTo(0);
     }
 
