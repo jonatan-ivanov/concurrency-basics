@@ -88,6 +88,7 @@ class CounterTest {
     private void detectIfCounterIsNonZero(Counter counter) {
         log.info("Detecting change...");
         while (counter.get() == 0) {
+//            Warning: putting anything here (e.g.: the next line) will break the test, it will always report false positive
 //            log.debug("No change so far...");
         }
 
